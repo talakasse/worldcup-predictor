@@ -53,11 +53,11 @@ async function initApp() {
     // Charger la ligue locale par défaut en attendant les données réelles
     APP_STATE.league = ADMIN_UTILS.loadLeagueState();
 
-    // Écouter les changements de session (login / logout / callback)
-    supabaseApp.auth.onAuthStateChange(async (event, session) => {
+    const handleSession = async (session) => {
+      console.log("handleSession: processing session info...", session ? session.user : "no session");
       if (session && session.user) {
         const su = session.user;
-        const provider = su.app_metadata.provider || "google";
+        const provider = (su.app_metadata && su.app_metadata.provider) || "google";
         
         const meta = su.user_metadata || {};
         APP_STATE.user = {
@@ -107,6 +107,24 @@ async function initApp() {
           } catch(e) {}
         }
         showLoginScreen();
+      }
+    };
+
+    // Récupérer la session actuelle immédiatement et démarrer l'interface
+    try {
+      console.log("initApp: fetching current Supabase session...");
+      const { data: { session } } = await supabaseApp.auth.getSession();
+      await handleSession(session);
+    } catch (err) {
+      console.error("initApp: failed to fetch Supabase session, falling back to login screen", err);
+      showLoginScreen();
+    }
+
+    // Écouter les futurs changements de session (login / logout / callback)
+    supabaseApp.auth.onAuthStateChange(async (event, session) => {
+      console.log("onAuthStateChange event:", event);
+      if (event === "SIGNED_IN" || event === "SIGNED_OUT" || event === "USER_UPDATED") {
+        await handleSession(session);
       }
     });
   } else {
