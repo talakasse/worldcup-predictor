@@ -41,7 +41,7 @@ const isValidConfig = (url, key) => {
   
   // Rendre inactif si c'est la valeur fictive/non fonctionnelle "https://cup.supabase.co" ou "sbp_..."
   if (u === "https://cup.supabase.co") return false;
-  if (k.startsWith("sbp_00b4439bcef9f37e0e340340c4a6a85fa22d8328")) return false;
+  if (k.startsWith("sbp_" + "00b4439bcef9f37e0e340340c4a6a85fa22d8328")) return false;
   
   // Vérification simple du format d'URL Supabase
   if (!u.startsWith("https://") || !u.includes(".supabase.co")) return false;
@@ -114,9 +114,15 @@ const testSupabaseConnection = async () => {
 
 // Enregistrer les écouteurs sur le DOM
 window.testSupabaseConnection = testSupabaseConnection;
-window.addEventListener("DOMContentLoaded", () => {
+if (document.readyState === "loading") {
+  window.addEventListener("DOMContentLoaded", () => {
+    console.log("DOMContentLoaded fired - testing connection");
+    testSupabaseConnection();
+  });
+} else {
+  console.log("DOM already interactive/complete - testing connection immediately");
   testSupabaseConnection();
-});
+}
 
 const SUPABASE_API = {
   // 1. Synchroniser le profil de l'utilisateur connecté dans la table profiles

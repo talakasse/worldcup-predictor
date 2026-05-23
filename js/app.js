@@ -34,9 +34,15 @@ const DISCORD_AVATARS = [
 ];
 
 // Initialisation au chargement de la page
-window.addEventListener("DOMContentLoaded", () => {
+if (document.readyState === "loading") {
+  window.addEventListener("DOMContentLoaded", () => {
+    console.log("DOMContentLoaded fired - starting app");
+    initApp();
+  });
+} else {
+  console.log("DOM already interactive/complete - starting app immediately");
   initApp();
-});
+}
 
 async function initApp() {
   // 1. Traduction initiale
