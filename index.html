@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr" translate="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google" content="notranslate">
+  <title>World Cup 2026 Predictor</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏆</text></svg>">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="notranslate" translate="no">
+
+  <div id="app">
+    <!-- 1. ÉCRAN DE CONNEXION (Visible par défaut) -->
+    <div id="login-screen" class="login-container">
+      <!-- Le contenu dynamique sera injecté par js/app.js -->
+    </div>
+
+    <!-- 2. EN-TÊTE DE L'APPLICATION (Masqué par défaut) -->
+    <header id="main-header" style="display: none;">
+      <div class="container header-container">
+        <!-- Logo -->
+        <a href="#" class="logo-section">
+          <span>🏆 WC2026</span> Predictor
+        </a>
+
+        <!-- Onglets -->
+        <nav>
+          <a class="nav-link active" data-tab="dashboard" data-i18n="dashboard">Tableau de Bord</a>
+          <a class="nav-link" data-tab="predict" data-i18n="predict">Pronostics</a>
+          <a class="nav-link" data-tab="leaderboard" data-i18n="leaderboard">Classement</a>
+          <a class="nav-link" data-tab="admin" data-i18n="admin" id="nav-admin-link" style="display: none;">Administration</a>
+        </nav>
+
+        <!-- Commandes de l'utilisateur -->
+        <div class="user-controls">
+          <button class="lang-btn">FR</button>
+          
+          <div id="db-status-badge" class="db-status-badge offline" title="Vérification de la connexion à la base de données..." onclick="window.triggerDbDiagnostics()">
+            <span class="status-dot"></span>
+            <span id="db-status-text" class="status-text">BDD...</span>
+          </div>
+
+          <div class="user-profile">
+            <div style="position: relative; display: flex;">
+              <img id="header-user-avatar" class="user-avatar" src="" alt="Avatar">
+              <div id="header-user-badge" class="header-provider-badge-container"></div>
+            </div>
+            <span id="header-user-name" class="user-name">...</span>
+            <button id="btn-header-logout" class="btn-logout" title="Se déconnecter">
+              <!-- Icône SVG Logout -->
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 3. CONTENU PRINCIPAL DE L'APPLICATION (Masqué par défaut) -->
+    <main id="main-content" style="display: none;">
+      <!-- Onglet 1 : Dashboard -->
+      <section id="dashboard-tab" class="tab-content container active">
+        <!-- Rendu dynamique par js/ui.js -->
+      </section>
+
+      <!-- Onglet 2 : Liste des matchs pour paris -->
+      <section id="predict-tab" class="tab-content container">
+        <!-- Rendu dynamique par js/ui.js -->
+      </section>
+
+      <!-- Onglet 3 : Classement / Leaderboard -->
+      <section id="leaderboard-tab" class="tab-content container">
+        <!-- Rendu dynamique par js/ui.js -->
+      </section>
+
+      <!-- Onglet 4 : Administration -->
+      <section id="admin-tab" class="tab-content container">
+        <!-- Rendu dynamique par js/ui.js -->
+      </section>
+    </main>
+
+    <!-- Pied de page -->
+    <footer>
+      <div class="container">
+        <p>&copy; 2026 World Cup Predictor. Développé pour la Coupe du Monde FIFA 2026 🍁 🌵 🦅</p>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">Se connecte de manière sécurisée via l'API Discord OAuth2</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- 4. DIALOGUE DE SIMULATION DE CONNEXION (MODAL) -->
+  <div id="mock-discord-modal-overlay" class="modal-overlay">
+    <div class="mock-discord-modal">
+      <div class="mock-header" id="mock-modal-header">
+        <div id="mock-header-logo-container" style="display: flex; justify-content: center; align-items: center; height: 50px; width: 100%;">
+          <!-- Injecté dynamiquement par JS -->
+        </div>
+      </div>
+      
+      <div class="mock-body">
+        <div class="mock-title">Autorisation de Connexion</div>
+        <div class="mock-subtitle" id="mock-modal-subtitle">Simulation de connexion pour tester l'application</div>
+        
+        <div class="mock-input-group">
+          <label>Fournisseur de connexion</label>
+          <div class="mock-provider-selector">
+            <div class="provider-option selected" data-provider="discord" id="prov-opt-discord">
+              <span>Discord</span>
+            </div>
+            <div class="provider-option" data-provider="google" id="prov-opt-google">
+              <span>Google</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mock-input-group">
+          <label for="mock-username-input" id="mock-username-label">Nom d'utilisateur</label>
+          <input type="text" id="mock-username-input" class="mock-input" placeholder="Ex: JeanDupont, Gamer..." maxlength="20">
+        </div>
+        
+        <div class="mock-input-group">
+          <label>Choisissez une couleur d'avatar</label>
+          <div id="mock-avatars-selection" class="mock-avatars-grid">
+            <!-- Injecté dynamiquement par js/app.js -->
+          </div>
+        </div>
+        
+        <div class="mock-actions">
+          <button class="btn-mock-cancel" onclick="closeMockLogin()">Annuler</button>
+          <button class="btn-mock-submit" onclick="submitMockLogin()">Autoriser</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- JavaScript Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/data.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
